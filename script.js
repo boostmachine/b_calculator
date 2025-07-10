@@ -2,7 +2,8 @@
 
 let a = "";
 let b = "";
-let operator = "";
+let operatorsArray = [];
+let numbersArray = [];
 let display = document.querySelector(".display")
 let currentDisplay = ""
 //Numbers
@@ -45,31 +46,41 @@ function divide(a, b) {
   return a / b
 };
 
-function getValues(){
-  let str = currentDisplay
-  a = +str.slice(0, str.indexOf(operator))
-  b = +str.slice(str.indexOf(operator) + 1)
-}
 
-function operate(operator, a, b) {
-  switch(operator) {
-    case "+":
-      currentDisplay = add(a, b);
-      break;
-    case "-":
-      currentDisplay = subtract(a, b);
-      break;
-    case "*":
-      currentDisplay = multiply(a, b);
-      break;
-    case "/":
-      currentDisplay = divide(a, b);
-      break;
+function operate() {
+  numbersArray.push(parseInt(a))
+  numbersArray = numbersArray.filter(item => item !== "")
+  let result = parseInt(numbersArray.splice(0, 1))
+  if (numbersArray.length === 0) return;
+  for(let i = 0; i < operatorsArray.length; i++){
+    switch(operatorsArray[i]) {
+      case "+":
+        result += numbersArray[i];
+        break;
+      case "-":
+        result -= numbersArray[i];
+        break;
+      case "*":
+        result *= numbersArray[i];
+        break;
+      case "/":
+        if (num === 0) {
+          alert("Cannot divide by zero.");
+          return 0;
+        }
+        result /= num;
+    }
   }
+  numbersArray = []
+  numbersArray.push(result)
+  operatorsArray = []
+  currentDisplay = result
+  a = ""
   updateDisplay()
 }
 
 function onDisplayNumber(number) {
+  a += number
   currentDisplay += number
   display.textContent = currentDisplay
   console.log(currentDisplay);
@@ -77,7 +88,9 @@ function onDisplayNumber(number) {
 }
 
 function onDisplayOperator(operatorio) {
-  operator = operatorio
+  operatorsArray.push(operatorio)
+  numbersArray.push(a)
+  a = ""
   currentDisplay += operatorio
   display.textContent = currentDisplay
   console.log(currentDisplay);
@@ -89,7 +102,8 @@ function clearDisplay() {
   currentDisplay = ""
   a = ""
   b = ""
-  operator = ""
+  operatorsArray = []
+  numbersArray = []
 }
 
 function updateDisplay() {
@@ -112,8 +126,7 @@ minus.addEventListener("click", () => onDisplayOperator("-"));
 asterisk.addEventListener("click", () => onDisplayOperator("*"));
 slash.addEventListener("click", () => onDisplayOperator("/"));
 equal.addEventListener("click", () => {
-  getValues()
-  operate(operator, a, b)
+  operate()
 });
 clear.addEventListener("click", () => clearDisplay());
 
