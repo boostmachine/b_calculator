@@ -48,9 +48,9 @@ function divide(a, b) {
 
 
 function operate() {
-  numbersArray.push(parseInt(a))
+  numbersArray.push(parseFloat(a))
   numbersArray = numbersArray.filter(item => item !== "")
-  let result = parseInt(numbersArray.splice(0, 1))
+  let result = parseFloat(numbersArray.splice(0, 1))
   if (numbersArray.length === 0) return;
   for(let i = 0; i < operatorsArray.length; i++){
     switch(operatorsArray[i]) {
@@ -64,11 +64,11 @@ function operate() {
         result *= numbersArray[i];
         break;
       case "/":
-        if (num === 0) {
+        if (result === 0) {
           alert("Cannot divide by zero.");
           return 0;
         }
-        result /= num;
+        result /= numbersArray[i];
     }
   }
   numbersArray = []
