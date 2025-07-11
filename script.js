@@ -6,6 +6,7 @@ let operatorsArray = [];
 let numbersArray = [];
 let display = document.querySelector(".display")
 let currentDisplay = ""
+let result = ""
 //Numbers
 let one = document.getElementById("one")
 let two = document.getElementById("two")
@@ -46,12 +47,24 @@ function divide(a, b) {
   return a / b
 };
 
+function checkLastSymbol() {
+  const operators = ["+", "-", "*", "/"];
+  let lastChar = currentDisplay.slice(-1);
+  while(operators.includes(lastChar)) {
+    lastChar = currentDisplay.slice(-1);
+    currentDisplay = currentDisplay.slice(0, -1);
+    operatorsArray = operatorsArray.slice(0, -1);
+  }
+}
 
 function operate() {
-  numbersArray.push(parseFloat(a))
+  checkLastSymbol()
+  if (numbersArray.length === 0 || numbersArray === 1) return;
   numbersArray = numbersArray.filter(item => item !== "")
-  let result = parseFloat(numbersArray.splice(0, 1))
-  if (numbersArray.length === 0) return;
+  if(a != "") {
+    numbersArray.push(parseFloat(a))
+  }
+  result = parseFloat(numbersArray.splice(0, 1))
   for(let i = 0; i < operatorsArray.length; i++){
     switch(operatorsArray[i]) {
       case "+":
@@ -89,7 +102,9 @@ function onDisplayNumber(number) {
 
 function onDisplayOperator(operatorio) {
   operatorsArray.push(operatorio)
-  numbersArray.push(a)
+ if(a != "") {
+    numbersArray.push(parseFloat(a))
+  }
   a = ""
   currentDisplay += operatorio
   display.textContent = currentDisplay
